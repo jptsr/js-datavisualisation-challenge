@@ -3,9 +3,9 @@
  *      - const parent
  *      - createElement
  * Afficher un graphe => OK
- * Récupérer les données avec Ajax => EN COURS
- * Implenter les données récupérées dans le graphe
- * Faire le temps réel sur base du tuto
+ * Récupérer les données avec Ajax => OK
+ * Implenter les données récupérées dans le graphe => OK
+ * Faire le temps réel sur base du tuto => EN COURS
  * Pimper le graphe
  * Faire les bonus
  */
@@ -13,14 +13,16 @@
 
 
 const prev_child_div = document.getElementById('bodyContent');
-// console.log(prev_child_div);
 const canvas = document.createElement('canvas');
 canvas.setAttribute('id', 'canvas_graph');
 const parent = prev_child_div.parentNode;
-// console.log(parent);
 parent.insertBefore(canvas, prev_child_div);
-console.log('hello2');
+
 let graph;
+let data_retrieved = [];
+let data_index = [];
+let data_all = [];
+
 
 
 let displayChart = () => {
@@ -30,34 +32,54 @@ let displayChart = () => {
     )
 }
 
-
-
 /**DATA
  * Récupérer les données
  * Maj en temps réel des données
  * Afficher les données dans le graphe
  */
 
-const xhr = new XMLHttpRequest();
-let data_retrieved = [];
+let updateData = () => {
+    // let res = xhr.response;
+    // let data = JSON.parse(res);
+    // let new_data = data[data.length-1];
 
-xhr.onreadystatechange = whatSstate = () => {
-    if(xhr.readyStage == 4){
-        console.log('Request is complete');
-    }
-}
-
-xhr.onload = getData = () => {
-    // récupére les données et les mettre au format json
-    let res = xhr.response;
-    // console.log(res);
-    let data = JSON.parse(res); // tableau de tableaux contenant des paires de key/value
     // console.log(data);
 
-    // accéder à chaque paire de key/value
+    // data.forEach(el => {
+    //     data_index.push(el[0]);
+    //     data_retrieved.push(parseInt(el[1]));
+    // });
+
+    // data_index.push(1);
+    // data_retrieved.push(20);
+
+    graph.update();
+
+    console.log('update is ok');
+    setTimeout(function(){updateData()}, 1000);
+}
+
+let updateFetch = () => {
+    fetch('https://canvasjs.com/services/data/datapoints.php')
+    .then(res => res.json(), err => console.log(err))
+    .then(data => display(data), err => console.log(err));
+    
+    console.log('update fetch');
+    setTimeout(function(){updateFetch()}, 1000);
+}
+
+updateFetch();
+
+// fetch('https://canvasjs.com/services/data/datapoints.php')
+// .then(res => res.json(), err => console.log(err))
+// .then(data => display(data), err => console.log(err));
+
+let display = (data) => {
+    // setTimeout(function(){updateData()}, 1000);
     data.forEach(el => {
-        console.log(el[0] + ' ' + el[1]);
-        // mettre les paires de key/value dans le nouveau tableau
+        // console.log(el[0] + ' ' + el[1]);
+
+        // mettre les paires de key/value sous forme d'objet dans le nouveau tableau
         // data_retrieved.push(
         //     {
         //         // key est maintenant déterminé comme étant une coordonnée avec sa valeur correspondante
@@ -65,35 +87,24 @@ xhr.onload = getData = () => {
         //         y: parseInt(el[1])
         //     }
         // );
-        data_retrieved.push(parseInt(el[1]))
+
+        data_index.push(el[0]);
+        data_retrieved.push(parseInt(el[1]));
     });
-    console.log(data_retrieved);
+
+    // data_all.push(data_index, data_retrieved);
+    // console.log(data_all);
 
     displayChart();
-}
+    
+    // updateData();
+};
 
-xhr.open('GET', 'https://canvasjs.com/services/data/datapoints.php', true);
-xhr.send();
-
-xhr.onerror = error = () => {
-    console.log('ERROR');
-}
-
-
-
-/**GRAPHE
- * axe x : ?
- * axe y : ?
- */
-
-const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-]
+const labels = data_index;
+// console.log(data_all);
+// console.log(data_all[0]);
+// console.log(data_all[1]);
+// data_all.forEach(el => {console.log(el)})
 
 const data = {
     labels: labels,
@@ -102,7 +113,6 @@ const data = {
             label: 'Crime stat',
             backgroundColor: 'rgb(255, 150, 31)',
             borderColor: 'rgb(255, 150, 31)',
-            // data: [0, 10, 5, 2, 20, 30, 45],    // données en temps réel
             data: data_retrieved,
             tension : 0.3
         }
