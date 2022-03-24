@@ -18,93 +18,15 @@ canvas.setAttribute('id', 'canvas_graph');
 const parent = prev_child_div.parentNode;
 parent.insertBefore(canvas, prev_child_div);
 
-let graph;
+let index = 0;
 let data_retrieved = [];
 let data_index = [];
 let data_all = [];
+let graph_exist = false;
 
 
-
-let displayChart = () => {
-    graph = new Chart(
-        document.getElementById('canvas_graph'),
-        config
-    )
-}
-
-/**DATA
- * Récupérer les données
- * Maj en temps réel des données
- * Afficher les données dans le graphe
- */
-
-let updateData = () => {
-    // let res = xhr.response;
-    // let data = JSON.parse(res);
-    // let new_data = data[data.length-1];
-
-    // console.log(data);
-
-    // data.forEach(el => {
-    //     data_index.push(el[0]);
-    //     data_retrieved.push(parseInt(el[1]));
-    // });
-
-    // data_index.push(1);
-    // data_retrieved.push(20);
-
-    graph.update();
-
-    console.log('update is ok');
-    setTimeout(function(){updateData()}, 1000);
-}
-
-let updateFetch = () => {
-    fetch('https://canvasjs.com/services/data/datapoints.php')
-    .then(res => res.json(), err => console.log(err))
-    .then(data => display(data), err => console.log(err));
-    
-    console.log('update fetch');
-    setTimeout(function(){updateFetch()}, 1000);
-}
-
-updateFetch();
-
-// fetch('https://canvasjs.com/services/data/datapoints.php')
-// .then(res => res.json(), err => console.log(err))
-// .then(data => display(data), err => console.log(err));
-
-let display = (data) => {
-    // setTimeout(function(){updateData()}, 1000);
-    data.forEach(el => {
-        // console.log(el[0] + ' ' + el[1]);
-
-        // mettre les paires de key/value sous forme d'objet dans le nouveau tableau
-        // data_retrieved.push(
-        //     {
-        //         // key est maintenant déterminé comme étant une coordonnée avec sa valeur correspondante
-        //         x: el[0],
-        //         y: parseInt(el[1])
-        //     }
-        // );
-
-        data_index.push(el[0]);
-        data_retrieved.push(parseInt(el[1]));
-    });
-
-    // data_all.push(data_index, data_retrieved);
-    // console.log(data_all);
-
-    displayChart();
-    
-    // updateData();
-};
 
 const labels = data_index;
-// console.log(data_all);
-// console.log(data_all[0]);
-// console.log(data_all[1]);
-// data_all.forEach(el => {console.log(el)})
 
 const data = {
     labels: labels,
@@ -114,7 +36,7 @@ const data = {
             backgroundColor: 'rgb(255, 150, 31)',
             borderColor: 'rgb(255, 150, 31)',
             data: data_retrieved,
-            tension : 0.3
+            tension : 0.1
         }
     ]
 }
@@ -124,3 +46,70 @@ const config = {
     data: data,
     options: {}
 }
+
+// let displayChart = () => {
+//     graph = new Chart(
+//         document.getElementById('canvas_graph'),
+//         config
+//     )
+//     graph_exist = true;
+// }
+
+let graph = new Chart(
+    document.getElementById('canvas_graph'),
+    config
+)
+
+// displayChart();
+
+/**DATA
+ * Récupérer les données
+ * Maj en temps réel des données
+ * Afficher les données dans le graphe
+ */
+
+let updateData = () => {
+    graph.update();
+    setTimeout(function(){updateData()}, 1000);
+    // graph.reset();
+   
+}
+
+let updateFetch = () => {
+    fetch('https://canvasjs.com/services/data/datapoints.php', {cache: "no-cache"})
+    .then(res => res.json(), err => console.log(err))
+    .then(data => display(data), err => console.log(err))
+    
+    // setTimeout(function(){updateFetch()}, 1000)
+}
+
+// updateFetch();
+setInterval(updateFetch, 5000)
+
+let display = (data) => {
+    console.log(data)
+
+    data.forEach(el => {
+        // graph.update();
+        index++;
+        // data_index.push(el[0]);
+        data_index.push(index);
+        data_retrieved.push(parseInt(el[1]));
+        // graph.data.datasets[0].data.push(parseInt(el[1]))
+        // graph.update();
+        // console.log('data retrieved  ', data_retrieved)
+        // console.log('graph data   ', graph.data.datasets[0].data)
+        // displayChart();
+        // if(!graph_exist){
+        //     displayChart();
+        // }
+        updateData();
+        // graph.reset();
+       
+    });
+
+    // displayChart();
+    // updateData(); 
+};
+
+// console.log('????');
