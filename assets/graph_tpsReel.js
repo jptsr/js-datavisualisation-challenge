@@ -18,17 +18,16 @@ canvas.setAttribute('id', 'canvas_graph');
 const parent = prev_child_div.parentNode;
 parent.insertBefore(canvas, prev_child_div);
 
-let index = 0;
 let data_retrieved = [];
 let data_index = [];
-let data_all = [];
+let index = 0;
 let graph_exist = false;
 
 
 
 const labels = data_index;
 
-const data = {
+let data = {
     labels: labels,
     datasets: [
         {
@@ -55,24 +54,17 @@ const config = {
 //     graph_exist = true;
 // }
 
+// displayChart();
+
 let graph = new Chart(
     document.getElementById('canvas_graph'),
     config
 )
 
-// displayChart();
-
-/**DATA
- * Récupérer les données
- * Maj en temps réel des données
- * Afficher les données dans le graphe
- */
-
 let updateData = () => {
-    graph.update();
-    setTimeout(function(){updateData()}, 1000);
+    graph.update()
+    setTimeout(updateData, 1000)
     // graph.reset();
-   
 }
 
 let updateFetch = () => {
@@ -85,16 +77,13 @@ let updateFetch = () => {
 
 // updateFetch();
 setInterval(updateFetch, 5000)
-
+// updateFetch()
 let display = (data) => {
     console.log(data)
 
     data.forEach(el => {
         // graph.update();
-        index++;
-        // data_index.push(el[0]);
-        data_index.push(index);
-        data_retrieved.push(parseInt(el[1]));
+        // data.datasets[0].data = data.datasets[0].data.push(parseInt(el[1]));
         // graph.data.datasets[0].data.push(parseInt(el[1]))
         // graph.update();
         // console.log('data retrieved  ', data_retrieved)
@@ -103,13 +92,22 @@ let display = (data) => {
         // if(!graph_exist){
         //     displayChart();
         // }
-        updateData();
+        setTimeout(
+            function(){
+            index++;
+            // data_index.push(el[0]);
+            data_index.push(index);
+            data_retrieved.push(parseInt(el[1]));    
+            console.log('JUPDATE    ')
+            graph.update()}
+        ,1500)
+        // updateData();     
         // graph.reset();
        
     });
 
     // displayChart();
     // updateData(); 
-};
+}
 
 // console.log('????');
