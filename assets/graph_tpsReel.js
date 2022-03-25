@@ -41,21 +41,20 @@ const graph = new Chart(
 let updateFetch = () => {
     fetch('https://canvasjs.com/services/data/datapoints.php', {cache: "no-cache"})
     .then(res => res.json(), err => console.log(err))
-    .then(data => display(data), err => console.log(err))
-    
-    setInterval(updateFetch, 10000)
+    .then(data => display(data), err => console.log(err))   
 }
 
 updateFetch()
+setInterval(updateFetch, 10000)
 
 let display = (data) => {
-    // console.log(data)
+    console.log(data)
     data.forEach((el, i) => {
         setTimeout(() => {
             index++
             data_index.push(index)
             data_retrieved.push(parseInt(el[1]))
-            // console.log(parseInt(el[1]))
+            console.log(parseInt(el[1]))
             graph.update()
         }, i * 1000)
     })
