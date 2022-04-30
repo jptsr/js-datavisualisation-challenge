@@ -10,4 +10,7 @@ Le but était de représenter les données sous la forme de graphiques interacti
 Lien du [projet](https://jptsr.github.io/js-datavisualisation-challenge/).  
   
   
-***Membres du groupe : [Alex Baes](https://github.com/Alex-B9), [Amoryne Jolimont](https://github.com/Amoryne), [Julie Paternoster](https://github.com/jptsr).***
+***Membres du groupe :  
+[Alex Baes](https://github.com/Alex-B9) (2è graphique)  
+[Amoryne Jolimont](https://github.com/Amoryne) (3è graphique) 
+[Julie Paternoster](https://github.com/jptsr) (1e graphique)***
