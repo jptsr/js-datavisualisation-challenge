@@ -12,5 +12,5 @@ Lien du [projet](https://jptsr.github.io/js-datavisualisation-challenge/).
   
 ***Membres du groupe :  
 [Alex Baes](https://github.com/Alex-B9) (2è graphique)  
-[Amoryne Jolimont](https://github.com/Amoryne) (3è graphique) 
+[Amoryne Jolimont](https://github.com/Amoryne) (3è graphique)  
 [Julie Paternoster](https://github.com/jptsr) (1e graphique)***
